@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>加载GEOJson地图</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<div style="height: 600px;" id="canvas"/>
+<!--加载Qunne和Map相关扩展类库-->
+<!--Qunee图形组件 -->
+<script src="http://demo.qunee.com/lib/qunee-min.js?v=1.8.1"></script>
+<!--MapChart组件 -->
+<script src="http://map.qunee.com/src/MapChart.js"></script>
+<!--TopoJSON数据支持 -->
+<script src="http://map.qunee.com/src/topojson.js"></script>
+<script>
+    var map = new Q.MapChart('canvas');
+    map.loadTopoJSON('CHN_adm02.json', {
+        zIndex: -10, onfinish: function (map) {
+            map.zoomToOverview();
+        }
+    });
+</script>
+</body>
+</html>
