@@ -36,7 +36,7 @@
       ) {
         
         // Use CORS
-        esriConfig.defaults.io.corsEnabledServers.push("earthquake.usgs.gov"); // supports CORS
+        esriConfig.defaults.io.corsEnabledServers.push("earthquake.csv"); // supports CORS
 
         // Use proxy if the server doesn't support CORS
         // esriConfig.defaults.io.proxyUrl = "/proxy/";  
@@ -46,7 +46,7 @@
           center: [ -60, -10 ],
           zoom: 4 
         });
-        csv = new CSVLayer("C:\Users\Administrator\Desktop\cheng\four\index0415\2.5_week.csv", {
+        csv = new CSVLayer("earthquake.csv", {
           copyright: "USGS.gov"
         });
         var orangeRed = new Color([238, 69, 0, 0.5]); // hex is #ff4500
