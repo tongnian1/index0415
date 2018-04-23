@@ -1,77 +1,72 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+    <title>CSVLayer sample</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/css/esri.css">
+    <style>
+      html, body, #map {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background-color: #FFF;
+        overflow: hidden;
+        font-family: "Trebuchet MS";
+      }
+    </style>
+    <script src="https://js.arcgis.com/3.23/"></script>
+    <script>
+      var map, csv;
 
-<head>
+      require([
+        "esri/map", 
+        "esri/layers/CSVLayer",
+        "esri/Color",
+        "esri/symbols/SimpleMarkerSymbol",
+        "esri/renderers/SimpleRenderer",
+        "esri/InfoTemplate",
+        "esri/config",
+        "dojo/domReady!"
+      ], function(
+        Map, CSVLayer, Color, SimpleMarkerSymbol, SimpleRenderer, InfoTemplate, esriConfig
+      ) {
+        
+        // Use CORS
+        esriConfig.defaults.io.corsEnabledServers.push("earthquake.usgs.gov"); // supports CORS
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no"/>
-<title>Basic clustering on FeatureLayer</title>
-
-<link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/css/esri.css">
-<script src="https://js.arcgis.com/3.23/"></script>
-
-<style>
-  html, body, #viewDiv {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-
-  #infoDiv{
-    top: 0px;
-    right: 0px;
-    position: absolute;
-    z-index: 2;
-    opacity: 0.9;
-    background-color: whitesmoke;
-    padding: 8px;
-    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size: 12px;
-  }
-</style>
-
-<script>
-  require([
-    "esri/map",
-    "esri/layers/FeatureLayer",
-    "esri/dijit/PopupTemplate",
-    "esri/dijit/Legend",
-    "dojo/domReady!"
-  ], function(Map, FeatureLayer, PopupTemplate, Legend
-  ) {
-
-    var map = new Map("viewDiv", {
-      basemap: "dark-gray-vector",
-      center: [ -73.92872, 40.71321 ],
-      zoom: 11
-    });
-
-    // Enable clustering in the layer's constructor
-    // and add the layer to the map
-
-    var serviceUrl = "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/nyc_parks_gardens_hist_sites/FeatureServer/0";
-    var layer = new FeatureLayer(serviceUrl, {
-      outFields: [ "facname"],
-      featureReduction: {
+        // Use proxy if the server doesn't support CORS
+        // esriConfig.defaults.io.proxyUrl = "/proxy/";  
+        
+        map = new Map("map", {
+          basemap: "gray",
+          center: [ -60, -10 ],
+          zoom: 4 
+        });
+        csv = new CSVLayer("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.csv", {
+           outFields: [ "mag"],
+           featureReduction: {
         type: "cluster"
       },
-     
-    });
-    map.addLayer(layer);
+          copyright: "USGS.gov"
+        });
+        var orangeRed = new Color([238, 69, 0, 0.5]); // hex is #ff4500
+        var marker = new SimpleMarkerSymbol("solid", 15, null, orangeRed);
+        var renderer = new SimpleRenderer(marker);
+        csv.setRenderer(renderer);
+        var template = new InfoTemplate("${type}", "${place}");
+        csv.setInfoTemplate(template);
+       
+    map.addLayer(csv);
+       
+      });
+    </script>
+  </head>
 
-
-  });
-
-</script>
-
-</head>
-
-<body>
-  <div id="viewDiv"></div>
-  <div id="infoDiv">
-    <div id="legendDiv"></div>
-  </div>
-</body>
-
+  <body>
+    <div id="map"></div>
+  </body>
 </html>
