@@ -37,6 +37,7 @@
 var map, collegeLyr, legend, renderer;
   require([
     "esri/map",
+    "esri/dijit/Legend",
      "esri/layers/CSVLayer",
     "esri/layers/FeatureLayer",
     "esri/symbols/SimpleMarkerSymbol",
@@ -46,7 +47,7 @@ var map, collegeLyr, legend, renderer;
     "esri/dijit/Legend",
     "esri/dijit/PopupTemplate",
     "dojo/domReady!"
-  ], function(Map, CSVLayer, FeatureLayer, SimpleMarkerSymbol, SimpleLineSymbol, Color, UniqueValueRenderer, Legend, PopupTemplate
+  ], function(Map,, Legend, CSVLayer, FeatureLayer, SimpleMarkerSymbol, SimpleLineSymbol, Color, UniqueValueRenderer, Legend, PopupTemplate
 ) {
  
   map = new Map("map", {
@@ -154,6 +155,6 @@ var map, collegeLyr, legend, renderer;
 </head>
 <body class="claro">
   <div id="map"></div>
- 
+ <div id="legendDiv"></div>
 </body>
 </html>
