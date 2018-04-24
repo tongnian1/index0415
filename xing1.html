@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+    <title>Simple Map</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.13/esri/css/esri.css">
+    <style>
+       html, body, #map {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background-color: #FFF;
+        overflow: hidden;
+        font-family: "Trebuchet MS";
+      }
+    </style>
+    <script src="https://js.arcgis.com/3.13/"></script>
+	<script src="https://code.jquery.com/jquery-1.8.3.js"></script>
+    <script>
+      var map;
+      require(["esri/map",  
+                "esri/renderers/ClassBreaksRenderer",
+            "esri/layers/ArcGISTiledMapServiceLayer",  
+            "esri/layers/GraphicsLayer",  
+            "esri/symbols/SimpleMarkerSymbol",  
+            "esri/symbols/SimpleLineSymbol",  
+			"esri/symbols/SimpleFillSymbol", 
+            "esri/renderers/SimpleRenderer",  
+            "esri/Color",  
+            "esri/geometry/Point",  
+            "esri/graphic",  
+            "dojo/domReady!"  ], function(Map,  
+                                            ClassBreaksRenderer,
+            Tiled,  
+            GraphicsLayer,  
+            SimpleMarkerSymbol,  
+            SimpleLineSymbol, 
+            SimpleFillSymbol, 			
+            SimpleRenderer,  
+            Color, Point, Graphic) {
+        map = new Map("map", {
+            basemap: "gray",
+            center: [119, 30],
+            zoom: 4
+    });
+        
+			var gLayer = new GraphicsLayer(); 
+			
+            gLayer.on("click",function(feature){  
+                console.log(feature);  
+            }); 
+            map.on("load",function(){  
+                $.get("https://tongnian1.github.io/index0415/C0.json",null,function(result){  
+                    var features = result.features;  
+                    for(var i=0;i<features.length;i++){  
+                        var feature = features[i]; 
+                        var graphic  = new Graphic(feature);  
+                        gLayer.add(graphic);  
+                         <!-- mk = new SimpleRenderer(new SimpleFillSymbol().setOutline(new SimpleLineSymbol().setWidth(0.1).setColor(new Color([128,128,128]))));	 -->
+
+                    }
+		  var  symbol=new SimpleFillSymbol();
+            symbol.setColor(new Color([150, 150, 150, 0.5]));           
+			var renderer = new ClassBreaksRenderer(symbol, "POPU");
+        renderer.addBreak(0, 2500, new SimpleFillSymbol().setColor(new Color([56, 168, 0, 0.5])));
+        renderer.addBreak(2500, 5000, new SimpleFillSymbol().setColor(new Color([139, 209, 0, 0.5])));
+        renderer.addBreak(5000, 7500, new SimpleFillSymbol().setColor(new Color([255, 255, 0, 0.5])));
+        renderer.addBreak(7500, 1000, new SimpleFillSymbol().setColor(new Color([255, 128, 0, 0.5])));
+        renderer.addBreak(1000, Infinity, new SimpleFillSymbol().setColor(new Color([255, 0, 0, 0.5])));
+
+                        gLayer.setRenderer(renderer);
+                        map.addLayer(gLayer);
+					
+                });  
+				
+            });	
+	      	map.resize();
+	
+        });  
+    </script>
+  </head>
+
+  <body>
+    <div id="map">
+  
+  </body>
+</html>
+ 
