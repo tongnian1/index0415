@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+    <title>Simple Map</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.13/esri/css/esri.css">
+    <style>
+       html, body, #map {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background-color: #FFF;
+        overflow: hidden;
+        font-family: "Trebuchet MS";
+      }
+    </style>
+    <script src="https://js.arcgis.com/3.13/"></script>
+	<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+    <script>
+      var map;
+      require(["esri/map",  
+                "esri/renderers/ClassBreaksRenderer",
+            "esri/layers/ArcGISTiledMapServiceLayer",  
+            "esri/layers/GraphicsLayer",  
+            "esri/symbols/SimpleMarkerSymbol",  
+            "esri/symbols/SimpleLineSymbol",  
+			"esri/symbols/SimpleFillSymbol", 
+            "esri/renderers/SimpleRenderer",  
+            "esri/Color",  
+            "esri/geometry/Point",  
+            "esri/graphic",  
+            "dojo/domReady!"  ], function(Map,  
+                                            ClassBreaksRenderer,
+            Tiled,  
+            GraphicsLayer,  
+            SimpleMarkerSymbol,  
+            SimpleLineSymbol, 
+            SimpleFillSymbol, 			
+            SimpleRenderer,  
+            Color, Point, Graphic) {
+        map = new Map("map", {
+            basemap: "gray",
+            center: [119, 30],
+            zoom: 4
+    });
+        
+			var gLayer = new GraphicsLayer({outFields:["POPU"],featureReduction: {
+        type: "cluster"
+      },
+     }); 
+			
+            gLayer.on("click",function(feature){  
+                console.log(feature);  
+            }); 
+            map.on("load",function(){  
+                $.get("https://tongnian1.github.io/index0415/C0.json",null,function(result){  
+                    var features = result.features;  
+                    for(var i=0;i<features.length;i++){  
+                        var feature = features[i]; 
+                        var graphic  = new Graphic(feature);  
+                        gLayer.add(graphic);  
+                       
+                    }
+		
+           var orangeRed = new Color([238, 69, 0, 0.5]); 
+		 var renderer = new SimpleRenderer(new SimpleMarkerSymbol("solid", 15, null, orangeRed));
+			  renderer.setSizeInfo({
+              field:"POPU",
+              minSize:14,
+              maxSize:50,
+              minDataValue:0,
+              maxDataValue:12000
+               });
+
+                        gLayer.setRenderer(renderer);
+                        map.addLayer(gLayer);
+					
+                });  
+				
+            });	
+	      	map.resize();
+	
+        });  
+    </script>
+  </head>
+
+  <body>
+    <div id="map">
+  
+  </body>
+</html>
+ 
