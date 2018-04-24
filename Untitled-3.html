@@ -19,7 +19,7 @@
       }
     </style>
     <script src="https://js.arcgis.com/3.13/"></script>
-	<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+	<script src="https://code.jquery.com/jquery-1.8.3.js"></script>
     <script>
       var map;
       require(["esri/map",  
@@ -57,7 +57,7 @@
                 console.log(feature);  
             }); 
             map.on("load",function(){  
-                $.get("http://tongnian1.github.io/index0415/C0.json",null,function(result){  
+                $.get("https://tongnian1.github.io/index0415/C0.json",null,function(result){  
                     var features = result.features;  
                     for(var i=0;i<features.length;i++){  
                         var feature = features[i]; 
