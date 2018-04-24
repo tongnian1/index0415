@@ -48,10 +48,7 @@
             zoom: 4
     });
         
-			var gLayer = new GraphicsLayer({outFields:["POPU"],featureReduction: {
-        type: "cluster"
-      },
-     }); 
+			var gLayer = new GraphicsLayer(); 
 			
             gLayer.on("click",function(feature){  
                 console.log(feature);  
@@ -63,20 +60,17 @@
                         var feature = features[i]; 
                         var graphic  = new Graphic(feature);  
                         gLayer.add(graphic);  
-                       
+                         <!-- mk = new SimpleRenderer(new SimpleFillSymbol().setOutline(new SimpleLineSymbol().setWidth(0.1).setColor(new Color([128,128,128]))));	 -->
+
                     }
-		
-            var renderer = new SimpleRenderer(new SimpleFillSymbol().setOutline(new SimpleLineSymbol().setWidth(0.1).setColor(new Color([128,128,128]))));
-          renderer.setColorInfo({
-            field: "POPU",
-            minDataValue: 0,
-            maxDataValue: 12000,
-            colors: [
-              new Color([255, 255, 255]),
-              new Color([56, 168, 0])
-            ]
-          });
-        
+		  var  symbol=new SimpleFillSymbol();
+            symbol.setColor(new Color([150, 150, 150, 0.5]));           
+			var renderer = new ClassBreaksRenderer(symbol, "POPU");
+        renderer.addBreak(0, 2500, new SimpleFillSymbol().setColor(new Color([56, 168, 0, 0.5])));
+        renderer.addBreak(2500, 5000, new SimpleFillSymbol().setColor(new Color([139, 209, 0, 0.5])));
+        renderer.addBreak(5000, 7500, new SimpleFillSymbol().setColor(new Color([255, 255, 0, 0.5])));
+        renderer.addBreak(7500, 1000, new SimpleFillSymbol().setColor(new Color([255, 128, 0, 0.5])));
+        renderer.addBreak(1000, Infinity, new SimpleFillSymbol().setColor(new Color([255, 0, 0, 0.5])));
 
                         gLayer.setRenderer(renderer);
                         map.addLayer(gLayer);
