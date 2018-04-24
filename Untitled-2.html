@@ -56,8 +56,8 @@ var map, collegeLyr, legend, renderer;
   });
 
 // Use CORS
-        esriConfig.defaults.io.corsEnabledServers.push("earthquake.usgs.gov"); // supports CORS
-    collegeLyr = new CSVLayer("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.csv", {
+        esriConfig.defaults.io.corsEnabledServers.push("tongnian1.github.io"); // supports CORS
+    collegeLyr = new CSVLayer("https://tongnian1.github.io/index0415/earthquake.csv", {
            outFields: ["magType"],
           copyright: "USGS.gov"
         });
