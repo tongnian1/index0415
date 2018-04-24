@@ -36,7 +36,7 @@
       ) {
         
         // Use CORS
-        esriConfig.defaults.io.corsEnabledServers.push("earthquake.usgs.gov"); // supports CORS
+        esriConfig.defaults.io.corsEnabledServers.push("tongnian1.github.io"); // supports CORS
 
         // Use proxy if the server doesn't support CORS
         // esriConfig.defaults.io.proxyUrl = "/proxy/";  
@@ -46,20 +46,17 @@
           center: [ -60, -10 ],
           zoom: 4 
         });
-        csv = new CSVLayer("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.csv", {
+        csv = new CSVLayer("https://tongnian1.github.io/index0415/earthquake.csv", {
            outFields: [ "mag"],
            featureReduction: {
         type: "cluster"
       },
           copyright: "USGS.gov"
         });
-        var orangeRed = new Color([238, 69, 0, 0.5]); // hex is #ff4500
+       var orangeRed = new Color([238, 69, 0, 0.5]); // hex is #ff4500
         var marker = new SimpleMarkerSymbol("solid", 15, null, orangeRed);
         var renderer = new SimpleRenderer(marker);
         csv.setRenderer(renderer);
-        var template = new InfoTemplate("${type}", "${place}");
-        csv.setInfoTemplate(template);
-       
     map.addLayer(csv);
        
       });
